@@ -83,8 +83,30 @@ file_dict_HER = {"HERonPt_RnD1_oldMS": {"DIR": r"HER on Pt repeatability\2022-03
                                      "cp_tspan": [1379, 4738],
                                      "tspan_list": [[1859, 1955], [2425, 2553], [3023, 3151], [3617, 3745], [4215, 4357]],
                                      "tspan_bg": [2030, 2222],},
-                        
-    }
+                  }
+
+file_dict_OER = {"OERonPt_RnD1_2ndMS": {"DIR": r"OER on Pt repeatability\2022-03-30 12_51_35 OER on Pt repeatability",
+                                    "ZIL": "2022-03-30 12_51_35 OER on Pt repeatability.tsv", 
+                                    "CV": "2022-03-30 12_51_35 OER on Pt repeatability_01_01_CVA_DUSB0_C01.mpt", 
+                                    "CP": "2022-03-30 12_51_35 OER on Pt repeatability_01_02_CP_DUSB0_C01.mpt",
+                                    "cp_tspan": [1070,4258],
+                                    "tspan_list": [[1994, 2102], [2597, 2696], [3196, 3290], [3776, 3902]],
+                                    "tspan_bg": [1684, 1792],},
+                 "OERonPt_RnD1_newMS": {"DIR": r"OER on Pt repeatability\2022-04-07 10_10_27 OER on Pt repeatability",
+                                    "ZIL": "2022-04-07 10_10_27 OER on Pt repeatability.tsv", 
+                                    "CV": "2022-04-07 10_10_27 OER on Pt repeatability_01_01_CVA_DUSB0_C01.mpt", 
+                                    "CP": "2022-04-07 10_10_27 OER on Pt repeatability_01_02_CP_DUSB0_C01.mpt",
+                                    "cp_tspan": [1788,5081],
+                                    "tspan_list": [[2247, 2274], [2753, 2866], [3351, 3471], [3950, 4063], [4542, 4675]],
+                                     "tspan_bg": [2333, 2560],},
+                 "OERonPt_RnD1_newMS_nonaqu": {"DIR": r"OER on Pt repeatability\2022-04-07 14_39_29 OER on Pt repeatability non-aqu",
+                                    "ZIL": "2022-04-07 14_39_29 OER on Pt repeatability non-aqu.tsv", 
+                                    "CV": "2022-04-07 14_39_29 OER on Pt repeatability non-aqu_02_01_CVA_DUSB0_C01.mpt", 
+                                    "CP": "2022-04-07 14_39_29 OER on Pt repeatability non-aqu_02_02_CP_DUSB0_C01.mpt",
+                                    "cp_tspan": [1881,5306],
+                                    "tspan_list": [[2432, 2476], [2981, 3078], [3569, 3666], [4164, 4268], [4780, 4870]],
+                                     "tspan_bg": [2552, 2760],},
+               }
 
 
 # ----------------------- END OF EDIT SETTINGS --------
@@ -160,11 +182,11 @@ def main():
         cps_vs_time = axes_c[0].get_figure()
         if SAVE_FIGURES is True:
             cps_vs_time.savefig("./" + EXP_NAME + "OER_CPs" + FIGURE_TYPE)
-        her_cal_curve = HER_cal[1].get_figure()
+        oer_cal_curve = OER_cal[1].get_figure()
         if SAVE_FIGURES is True:
-                her_cal_curve.savefig("./" + EXP_NAME + "OER_cal_curve" + FIGURE_TYPE)
+                oer_cal_curve.savefig("./" + EXP_NAME + "OER_cal_curve" + FIGURE_TYPE)
         
-        return HER_cal[0]
+        return OER_cal[0]
     
     else:
         raise NameError("WHICH_PART not recognized.")
@@ -173,12 +195,15 @@ def main():
 # if __name__ == "__main__":
 #     main()    
 
-full_data_list = []
+# full_data_list = []
 # h2_F_list=[]
-# o2_F_list=[]
+o2_F_list=[]
 
 # for file in file_dict_HER:
-for file in file_dict_OER:
+
+file_dict = file_dict_OER    
+
+for file in file_dict:
     EXP_NAME = file
     data_directory = PARENT_DIR / file_dict[file]["DIR"]
     zilien_filename = file_dict[file]["ZIL"]
@@ -187,9 +212,9 @@ for file in file_dict_OER:
     cp_tspan = file_dict[file]["cp_tspan"]
     cp_tspan_list = file_dict[file]["tspan_list"]
     cp_bg = file_dict[file]["tspan_bg"]
-    full_data_list.append(main())
+    # full_data_list.append(main())
     # h2_F_list.append(main())
-    # o2_F_list.append(main())
+    o2_F_list.append(main())
     
 
     
