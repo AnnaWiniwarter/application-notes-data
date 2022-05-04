@@ -16,8 +16,10 @@ from ixdat.techniques.ec import ECMeasurement
 
 # -----------------------EDIT SETTINGS HERE----------------------------------
 # Settings for choosing which part of the script is executed:
-DATA_SOURCE = "raw"
+DATA_SOURCE = "raw_plus"
 # DATA_SOURCE can be "raw" (for importing EC and MS data from Zilien .tsv file),
+# "raw_plus" (for importing MS data from Zilien .tsv file and EC data from
+# biologic .mpt files),
 # or "ixdat" (for importing ixdat .csv files)
 # in either case, for plotting the CV only, the biologic CVA file is imported
 # automatically
@@ -58,17 +60,16 @@ file_dict = {"HERonPt_RnD1_1": {"DIR": r"2022-04-26 12_31_02 HER_repetition_1",
                                 "ZIL": "2022-04-26 15_09_49 HER_repetition_3.tsv",
                                 "CV": "2022-04-26 15_09_49 HER_repetition_3_01_01_CVA_DUSB0_C01.mpt",
                                 "CP": "2022-04-26 15_09_49 HER_repetition_3_01_02_CP_DUSB0_C01.mpt",
-                                "cp_tspan": [1210, 4490],
-                                "tspan_list": [[1686, 1755], [2258, 2353], [2839, 2954], [3427, 3543], [4033, 4141]],
-                                "tspan_bg": [1840, 2019], },
+                                "cp_tspan": [1050, 4290],
+                                "tspan_list": [[1401, 1491], [1966, 2097], [2567, 2703], [3169, 3296], [3770, 3888]],
+                                "tspan_bg": [1591, 1771], },
              "HERonPt_RnD1_4_01": {"DIR": r"2022-04-26 16_27_01 HER_repetition_4+",
                                    "ZIL": "2022-04-26 16_27_01 HER_repetition_4+.tsv",
                                    "CV": "2022-04-26 16_27_01 HER_repetition_4+_01_01_CVA_DUSB0_C01.mpt",
                                    "CP": "2022-04-26 16_27_01 HER_repetition_4+_01_02_CP_DUSB0_C01.mpt",
-                                   "cp_tspan": [1639, 4916],
-                                   # [2157, 2197],
-                                   "tspan_list": [[2699, 2803], [3276, 3399], [3872, 4006], [4475, 4605]],
-                                   "tspan_bg": [2272, 2482], },
+                                   "cp_tspan": [1150, 4200],
+                                   "tspan_list": [[1396, 1496], [1983, 2102], [2582, 2701], [3188, 3288], [3780, 3899]],
+                                   "tspan_bg": [1590, 1758], },
              # "HERonPt_RnD1_4_02": {"DIR": r"2022-04-26 16_27_01 HER_repetition_4+",
              #                       "ZIL": "2022-04-26 16_27_01 HER_repetition_4+.tsv",
              #                       "CV": "2022-04-26 16_27_01 HER_repetition_4+_01_01_CVA_DUSB0_C01.mpt",
@@ -98,9 +99,29 @@ def main():
             full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
         full_data.export("./" + EXP_NAME + ".csv")
 
+    elif DATA_SOURCE == "raw_plus":  # option 1: import MS data from Zilien data file
+        # and EC data from biologic files
+        print(data_directory / zilien_filename)
+        full_data_zilien = ixdat.Measurement.read(
+            data_directory / zilien_filename, reader="zilien")
+        cvs_ec_only = ixdat.Measurement.read(
+            data_directory / biologic_filename_cv, reader="biologic")
+        cps_ec_only = ixdat.Measurement.read(
+            data_directory / biologic_filename_cp, reader="biologic")
+        # These two lines get rid of the EC data from the zilien-read file,
+        # since we will use the EC data from the biologic file instead.
+        full_data_zilien.replace_series("Ewe/V", None)
+        full_data_zilien.replace_series("I/mA", None)
+        full_data = full_data_zilien + cvs_ec_only + cps_ec_only
+        axes_a = full_data.plot_measurement(tspan=[0, 10000])
+        full_plot = axes_a[0].get_figure()
+        if SAVE_FIGURES is True:
+            full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
+        full_data.export("./" + EXP_NAME + ".csv")
+
     elif DATA_SOURCE == "ixdat":  # option 2: import from ixdat-datafiles
         full_data = ixdat.Measurement.read("./" + EXP_NAME + ".csv", reader="ixdat")
-        # axes_a = full_data.plot_measurement(tspan=[0,10000])
+        axes_a = full_data.plot_measurement(tspan=[0, 70000])
     else:
         raise NameError("DATA_SOURCE not recognized.")
 
@@ -193,4 +214,5 @@ for file in file_dict:
     cp_tspan_list = file_dict[file]["tspan_list"]
     cp_bg = file_dict[file]["tspan_bg"]
     # full_data_list.append(main())
+    h2_F_list.append(main())
     h2_F_list.append(main())
