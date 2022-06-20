@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Images saved in git folder
-.png
-.jpg
+*.png
+*.jpg
