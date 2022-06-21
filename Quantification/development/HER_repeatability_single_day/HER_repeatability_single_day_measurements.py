@@ -146,7 +146,7 @@ def plot_and_calibrate(full_data, cp_tspan, cp_tspan_list, cp_selector_list,
         t_steady_pulse=t_steady_pulse, tspan_bg=cp_bg, ax="new",
         axes_measurement=axes_c, return_ax=True)
     print("HER calibration factor F= {:.3f}".format(cal[0].F))
-    cal[1].annotate("F = {:.3f}".format(cal[0].F),
+    cal[1].annotate("F = {:.3f} C/mol".format(cal[0].F),
                     (0.2, 0.8), xycoords="subfigure fraction")
     cal[1].annotate("t_start = {:.0f} s".format(t_start),
                     (0.2, 0.75), xycoords="subfigure fraction")
@@ -167,7 +167,7 @@ def main():
         print(data_directory / zilien_filename)
         full_data = ixdat.Measurement.read(
             data_directory / zilien_filename, reader="zilien")
-        axes_a = full_data.plot_measurement(tspan=[0, 10000])
+        axes_a = full_data.plot_measurement(tspan=[0, 100000])
         full_plot = axes_a[0].get_figure()
         if SAVE_FIGURES is True:
             full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
@@ -188,7 +188,7 @@ def main():
         full_data_zilien.replace_series("I/mA", None)
         # full_data_zilien.replace_series("Potential time [s]", None)
         full_data = full_data_zilien + cvs_ec_only + cps_ec_only
-        axes_a = full_data.plot_measurement(tspan=[0, 10000])
+        axes_a = full_data.plot_measurement(tspan=[0, 100000])
         full_plot = axes_a[0].get_figure()
         if SAVE_FIGURES is True:
             full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
@@ -216,7 +216,8 @@ def main():
                                                         cp_selector_list=cp_selector_list,
                                                         selector_name=selector_name,
                                                         t_steady_pulse=t_steady_pulse,
-                                                        cp_bg=cp_bg))
+                                                        cp_bg=cp_bg,
+                                                        cal_type=cal_type))
         return F_and_tstamp_list
 
     else:
@@ -246,7 +247,13 @@ for file in file_dict:
     cal_type = "HER"
     h2_F_and_tstamp_list = h2_F_and_tstamp_list + main()
     # full_data_list.append(main())
+
+# Now plot the time development of F
 time_abs = [h2_F_and_tstamp_list[x][1] for x in np.arange(len(h2_F_and_tstamp_list))]
 time = [(t - time_abs[0])/3600 for t in time_abs]
 Fs = [h2_F_and_tstamp_list[x][0].F for x in np.arange(len(h2_F_and_tstamp_list))]
-plt.plot(time, Fs)
+fig1, ax1 = plt.subplots()
+ax1.plot(time, Fs, linestyle="", marker="o", label=cal_type)
+ax1.legend()
+ax1.set_ylabel("F$_{H2}$ from HER / [C/mol]")
+ax1.set_xlabel("time / [h]")
