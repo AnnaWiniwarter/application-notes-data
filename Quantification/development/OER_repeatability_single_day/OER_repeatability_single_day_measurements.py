@@ -28,6 +28,8 @@ WHICH_PART = "plot+cal"
 
 SAVE_FIGURES = True
 # SAVE_FIGURES set to True: figures will be saved automatically.
+# TODO: make sure that if multiple calibrations are done in the same file, that
+# the figures won't be overwritten (as it is currently)
 FIGURE_TYPE = ".png"
 # FIGURE_TYPE can be any format matplotlib accepts for saving figures, eg.
 # ".png", ".svg", ".pdf" etc.
@@ -246,5 +248,4 @@ ax1.plot(time, Fs, linestyle="", marker="o", markerfacecolor="k",
          markeredgecolor="k", label=cal_type)
 ax1.legend()
 ax1.set_ylabel("F$_{O2}$ from OER / [C/mol]")
-ax1.set_xlabel("time / [h]")
 ax1.set_xlabel("time / [h]")
