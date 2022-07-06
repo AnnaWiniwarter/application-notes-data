@@ -26,7 +26,9 @@ DATA_SOURCE = "raw_plus"
 WHICH_PART = "plot+cal"
 # WHICH_PART can be "import_only", "plot_CVs", "plot+cal"
 
-SAVE_FIGURES = True
+FOLLOW_SIGNALS = True
+# set to true to print a plot with the signal development of selected masses over time
+SAVE_FIGURES = False
 # SAVE_FIGURES set to True: figures will be saved automatically.
 # TODO: make sure that if multiple calibrations are done in the same file, that
 # the figures won't be overwritten (as it is currently)
@@ -37,46 +39,51 @@ FIGURE_TYPE = ".png"
 # select the directory of the raw data.
 EXP_NAME = "OERonPt_repeated"
 PARENT_PATH = Path(
-    r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note\OER on Pt repeatability")
+    r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note\OER on Pt repeatability"
+)
 
 # select the filenames of the raw data.
 # zilien_filename = "2022-03-16 10_41_29 HER_on_Pt_repeatability_test_1.tsv"
 # biologic_filename_cv = "2022-03-16 10_41_29 HER_on_Pt_repeatability_test_1_04_01_CVA_DUSB0_C01.mpt"
 # biologic_filename_cp = "2022-03-16 10_41_29 HER_on_Pt_repeatability_test_1_04_02_CP_DUSB0_C01.mpt"
 
-file_dict = {"OERonPt_RnD1_1": {"DIR": r"2022-04-27 11_30_26 OER_repetition_1",
-                                "ZIL": "2022-04-27 11_30_26 OER_repetition_1.tsv",
-                                "CV": "2022-04-27 11_30_26 OER_repetition_1_01_01_CVA_DUSB0_C01.mpt",
-                                "CP": "2022-04-27 11_30_26 OER_repetition_1_01_02_CP_DUSB0_C01.mpt",
-                                "cv_tspan": [472, 1580],
-                                "cp_tspan": [1880, 4670],
-                                # "tspan_list": []
-                                "Ns_lists": [[7, 9, 11, 13, 15]],
-                                "tspan_bg": [2310, 2350],
-                                "tspan_bg_list": [[2310, 2350]],
-                                },
-             "OERonPt_RnD1_2": {"DIR": r"2022-04-27 13_48_01 OER_repetition_2",
-                                "ZIL": r"2022-04-27 13_48_01 OER_repetition_2.tsv",
-                                "CV": "2022-04-27 13_48_01 OER_repetition_2_01_01_CVA_DUSB0_C01.mpt",
-                                "CP": "2022-04-27 13_48_01 OER_repetition_2_01_02_CP_DUSB0_C01.mpt",
-                                "cv_tspan": [1038, 2057],
-                                "cp_tspan": [2227, 5328],
-                                # "tspan_list": []
-                                "Ns_lists": [[6, 8, 10, 12, 14]],
-                                "tspan_bg": [2643, 2805],
-                                "tspan_bg_list": [[2643, 2805]],
-                                },
-             "OERonPt_RnD1_3+": {"DIR": r"2022-04-27 15_24_18 OER_repetition_3+",
-                                 "ZIL": "2022-04-27 15_24_18 OER_repetition_3+.tsv",
-                                 "CV": "2022-04-27 15_24_18 OER_repetition_3+_01_01_CVA_DUSB0_C01.mpt",
-                                 "CP": "2022-04-27 15_24_18 OER_repetition_3+_01_02_CP_DUSB0_C01.mpt",
-                                 "cv_tspan": [128, 1173],  # first round CVs
-                                 "cp_tspan": [0, 67000],
-                                 "Ns_lists": [[x+16*y for x in [6, 8, 10, 12, 14]] for y in np.arange(16)],
-                                 # "tspan_list": [[1396, 1496], [1983, 2102], [2582, 2701], [3188, 3288], [3780, 3899]],
-                                 "tspan_bg_list": [[x+4150*y for x in [1690, 1790]] for y in np.arange(16)],
-                                 },
-             }
+file_dict = {
+    # "OERonPt_RnD1_1": {
+    #     "DIR": r"2022-04-27 11_30_26 OER_repetition_1",
+    #     "ZIL": "2022-04-27 11_30_26 OER_repetition_1.tsv",
+    #     "CV": "2022-04-27 11_30_26 OER_repetition_1_01_01_CVA_DUSB0_C01.mpt",
+    #     "CP": "2022-04-27 11_30_26 OER_repetition_1_01_02_CP_DUSB0_C01.mpt",
+    #     "cv_tspan": [472, 1580],
+    #     "cp_tspan": [1880, 4670],
+    #     # "tspan_list": []
+    #     "Ns_lists": [[7, 9, 11, 13, 15]],
+    #     "tspan_bg": [2310, 2350],
+    #     "tspan_bg_list": [[2310, 2350]],
+    # },
+    # "OERonPt_RnD1_2": {
+    #     "DIR": r"2022-04-27 13_48_01 OER_repetition_2",
+    #     "ZIL": r"2022-04-27 13_48_01 OER_repetition_2.tsv",
+    #     "CV": "2022-04-27 13_48_01 OER_repetition_2_01_01_CVA_DUSB0_C01.mpt",
+    #     "CP": "2022-04-27 13_48_01 OER_repetition_2_01_02_CP_DUSB0_C01.mpt",
+    #     "cv_tspan": [1038, 2057],
+    #     "cp_tspan": [2227, 5328],
+    #     # "tspan_list": []
+    #     "Ns_lists": [[6, 8, 10, 12, 14]],
+    #     "tspan_bg": [2643, 2805],
+    #     "tspan_bg_list": [[2643, 2805]],
+    # },
+    "OERonPt_RnD1_3+": {
+        "DIR": r"2022-04-27 15_24_18 OER_repetition_3+",
+        "ZIL": "2022-04-27 15_24_18 OER_repetition_3+.tsv",
+        "CV": "2022-04-27 15_24_18 OER_repetition_3+_01_01_CVA_DUSB0_C01.mpt",
+        "CP": "2022-04-27 15_24_18 OER_repetition_3+_01_02_CP_DUSB0_C01.mpt",
+        "cv_tspan": [128, 1173],  # first round CVs
+        "cp_tspan": [0, 67000],
+        "Ns_lists": [[x + 16 * y for x in [6, 8, 10, 12, 14]] for y in np.arange(16)],
+        # "tspan_list": [[1396, 1496], [1983, 2102], [2582, 2701], [3188, 3288], [3780, 3899]],
+        "tspan_bg_list": [[x + 4150 * y for x in [1690, 1790]] for y in np.arange(16)],
+    },
+}
 
 
 # ----------------------- END OF EDIT SETTINGS --------
@@ -95,31 +102,42 @@ def plot_cvs(full_data, cv_tspan):
     cvs_ec_vs_pot = axes_c.get_figure()
     if SAVE_FIGURES is True:
         cvs_ec_vs_pot.savefig("./" + EXP_NAME + "CV_vs_potential_EC" + FIGURE_TYPE)
-
     # To instead plot averaged (less noisy) EC data, import biologic file directly
     cvs_ec_only = ECMeasurement.read(
-        data_directory / biologic_filename_cv, reader="biologic")
+        data_directory / biologic_filename_cv, reader="biologic"
+    )
     cvs_ec_only = cvs_ec_only.as_cv()
     cvs_ec_only.redefine_cycle(start_potential=0.9, redox=True)
     axes_c = cvs_ec_only[3].plot_vs_potential()
     cvs_ec_vs_pot = axes_c.get_figure()
     if SAVE_FIGURES is True:
         cvs_ec_vs_pot.savefig(
-            "./" + EXP_NAME + "CV_vs_potential_EC_biologic" + FIGURE_TYPE)
+            "./" + EXP_NAME + "CV_vs_potential_EC_biologic" + FIGURE_TYPE
+        )
 
 
-def plot_and_calibrate(full_data, cp_tspan, cp_tspan_list, cp_selector_list,
-                       selector_name, t_steady_pulse, cp_bg, cal_type):
+def plot_and_calibrate(
+    full_data,
+    cp_tspan,
+    cp_tspan_list,
+    cp_selector_list,
+    selector_name,
+    t_steady_pulse,
+    cp_bg,
+    cal_type,
+):
     """Plot HER/OER and calibrate hydrogen/oxygen."""
     # select the t_span automatically based on selector input
-    t_start = full_data.select_values(
-        **{selector_name: cp_selector_list[0]}).grab('t')[0][0]
-    t_end = full_data.select_values(
-        **{selector_name: cp_selector_list[-1]}).grab('t')[0][-1]
+    t_start = full_data.select_values(**{selector_name: cp_selector_list[0]}).grab("t")[
+        0
+    ][0]
+    t_end = full_data.select_values(**{selector_name: cp_selector_list[-1]}).grab("t")[
+        0
+    ][-1]
     cps = full_data.cut(tspan=[t_start, t_end])
     # save t_stamp for later on processing
     tstamp = cps.tstamp + t_start
-    selector_list_new = [x-cp_selector_list[0] for x in cp_selector_list]
+    selector_list_new = [x - cp_selector_list[0] for x in cp_selector_list]
     if cal_type == "HER":
         mol = "H2"
         mass = "M2"
@@ -132,15 +150,24 @@ def plot_and_calibrate(full_data, cp_tspan, cp_tspan_list, cp_selector_list,
         raise NameError("No such cal_type found.")
     axes_c = cps.plot_measurement(mass_list=[mass])
     cal = cps.ecms_calibration_curve(
-        mol, mass, electrons, selector_list=selector_list_new,
+        mol,
+        mass,
+        electrons,
+        selector_list=selector_list_new,
         selector_name=selector_name,
-        t_steady_pulse=t_steady_pulse, tspan_bg=cp_bg, ax="new",
-        axes_measurement=axes_c, return_ax=True)
+        t_steady_pulse=t_steady_pulse,
+        tspan_bg=cp_bg,
+        ax="new",
+        axes_measurement=axes_c,
+        return_ax=True,
+    )
     print(cal_type + " calibration factor F= {:.3f} C/mol".format(cal[0].F))
-    cal[1].annotate("F = {:.3f} C/mol".format(cal[0].F),
-                    (0.2, 0.8), xycoords="subfigure fraction")
-    cal[1].annotate("t_start = {:.0f} s".format(t_start),
-                    (0.2, 0.75), xycoords="subfigure fraction")
+    cal[1].annotate(
+        "F = {:.3f} C/mol".format(cal[0].F), (0.2, 0.8), xycoords="subfigure fraction"
+    )
+    cal[1].annotate(
+        "t_start = {:.0f} s".format(t_start), (0.2, 0.75), xycoords="subfigure fraction"
+    )
 
     cps_vs_time = axes_c[0].get_figure()
     if SAVE_FIGURES is True:
@@ -148,31 +175,70 @@ def plot_and_calibrate(full_data, cp_tspan, cp_tspan_list, cp_selector_list,
     cal_curve = cal[1].get_figure()
     if SAVE_FIGURES is True:
         cal_curve.savefig("./" + EXP_NAME + cal_type + "_cal_curve" + FIGURE_TYPE)
-
     return (cal[0], tstamp)
+
+
+# plot the the difference in value between two times in a list of times
+def value_diff_t_list(data, tstamp_list, value_name_list, plot=True):
+    time_abs = [tstamp_list[x] for x in np.arange(len(tstamp_list))]
+    time = [(t - time_abs[0]) for t in time_abs]
+    time_diff_hours = [
+        (time[t] + time[t + 1]) / 2 / 3600 for t in np.arange(len(time) - 1)
+    ]
+    if plot:
+        fig1, ax1 = plt.subplots()
+        ax1.plot([0, max(time_diff_hours)], [0, 0], "k:")
+    for value_name in value_name_list:
+        values = [
+            np.average(data.grab(value_name, tspan=[tstamp - 10, tstamp + 10])[1])
+            for tstamp in time
+        ]
+        values_diff = [
+            (values[x + 1] - values[x]) / values[x] * 100 / (time[x + 1] - time[x])
+            for x in np.arange(len(values) - 1)
+        ]
+        if plot:
+            color = ixdat.plotters.ms_plotter.STANDARD_COLORS[value_name]
+            ax1.plot(
+                time_diff_hours,
+                values_diff,
+                linestyle="",
+                marker="*",
+                markerfacecolor=color,
+                markeredgecolor=color,
+                label=value_name,
+            )
+    ax1.legend()
+    ax1.set_ylabel("delta signal/time [%/h]")
+    ax1.set_xlabel("experiment time / [h]")
 
 
 def main():
     """Run main function."""
-    if DATA_SOURCE == "raw":  # option 1: import both EC and MS data from Zilien data file
+    if (
+        DATA_SOURCE == "raw"
+    ):  # option 1: import both EC and MS data from Zilien data file
         print(data_directory / zilien_filename)
         full_data = ixdat.Measurement.read(
-            data_directory / zilien_filename, reader="zilien")
+            data_directory / zilien_filename, reader="zilien"
+        )
         axes_a = full_data.plot_measurement(tspan=[0, 100000])
         full_plot = axes_a[0].get_figure()
         if SAVE_FIGURES is True:
             full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
         full_data.export("./" + EXP_NAME + ".csv")
-
     elif DATA_SOURCE == "raw_plus":  # option 1: import MS data from Zilien data file
         # and EC data from biologic files
         print(data_directory / zilien_filename)
         full_data_zilien = ixdat.Measurement.read(
-            data_directory / zilien_filename, reader="zilien", technique="MS")
+            data_directory / zilien_filename, reader="zilien", technique="MS"
+        )
         cvs_ec_only = ixdat.Measurement.read(
-            data_directory / biologic_filename_cv, reader="biologic")
+            data_directory / biologic_filename_cv, reader="biologic"
+        )
         cps_ec_only = ixdat.Measurement.read(
-            data_directory / biologic_filename_cp, reader="biologic")
+            data_directory / biologic_filename_cp, reader="biologic"
+        )
         # These two lines get rid of the EC data from the zilien-read file,
         # since we will use the EC data from the biologic file instead.
         full_data_zilien.replace_series("Ewe/V", None)
@@ -184,33 +250,41 @@ def main():
         if SAVE_FIGURES is True:
             full_plot.savefig("./" + EXP_NAME + "full_experiment" + FIGURE_TYPE)
         full_data.export("./" + EXP_NAME + ".csv")
-
     elif DATA_SOURCE == "ixdat":  # option 2: import from ixdat-datafiles
         full_data = ixdat.Measurement.read("./" + EXP_NAME + ".csv", reader="ixdat")
         axes_a = full_data.plot_measurement(tspan=[0, 70000])
     else:
         raise NameError("DATA_SOURCE not recognized.")
-
     if WHICH_PART == "import_only":
         return full_data
-
     elif WHICH_PART == "plot_CVs":  # plot the CV part
         plot_cvs(full_data=full_data, cv_tspan=cv_tspan)
-
     elif WHICH_PART == "plot+cal":
         F_and_tstamp_list = []
-        for cp_selector_list, cp_bg in zip(file_dict[file]["Ns_lists"],
-                                           file_dict[file]["tspan_bg_list"]):
-            F_and_tstamp_list.append(plot_and_calibrate(full_data=full_data,
-                                                        cp_tspan=cp_tspan,
-                                                        cp_tspan_list=cp_tspan_list,
-                                                        cp_selector_list=cp_selector_list,
-                                                        selector_name=selector_name,
-                                                        t_steady_pulse=t_steady_pulse,
-                                                        cp_bg=cp_bg,
-                                                        cal_type=cal_type))
+        for cp_selector_list, cp_bg in zip(
+            file_dict[file]["Ns_lists"], file_dict[file]["tspan_bg_list"]
+        ):
+            F_and_tstamp_list.append(
+                plot_and_calibrate(
+                    full_data=full_data,
+                    cp_tspan=cp_tspan,
+                    cp_tspan_list=cp_tspan_list,
+                    cp_selector_list=cp_selector_list,
+                    selector_name=selector_name,
+                    t_steady_pulse=t_steady_pulse,
+                    cp_bg=cp_bg,
+                    cal_type=cal_type,
+                )
+            )
+        if FOLLOW_SIGNALS:
+            value_diff_t_list(
+                full_data,
+                [F_and_tstamp_list[x][1] for x in np.arange(len(F_and_tstamp_list))],
+                value_name_list,
+                plot=True,
+            )
         return F_and_tstamp_list
-
+        return F_and_tstamp_list
     else:
         raise NameError("WHICH_PART not recognized.")
 
@@ -236,16 +310,23 @@ for file in file_dict:
     t_steady_pulse = 100
     cp_tspan_list = None
     cal_type = "OER"
+    value_name_list = ["M2", "M4", "M18", "M28", "M32", "M40", "M44"]
     o2_F_and_tstamp_list = o2_F_and_tstamp_list + main()
     # full_data_list.append(main())
-
 # Now plot the time development of F
 time_abs = [o2_F_and_tstamp_list[x][1] for x in np.arange(len(o2_F_and_tstamp_list))]
-time = [(t - time_abs[0])/3600 for t in time_abs]
+time = [(t - time_abs[0]) / 3600 for t in time_abs]
 Fs = [o2_F_and_tstamp_list[x][0].F for x in np.arange(len(o2_F_and_tstamp_list))]
 fig1, ax1 = plt.subplots()
-ax1.plot(time, Fs, linestyle="", marker="o", markerfacecolor="k",
-         markeredgecolor="k", label=cal_type)
+ax1.plot(
+    time,
+    Fs,
+    linestyle="",
+    marker="o",
+    markerfacecolor="k",
+    markeredgecolor="k",
+    label=cal_type,
+)
 ax1.legend()
 ax1.set_ylabel("F$_{O2}$ from OER / [C/mol]")
 ax1.set_xlabel("time / [h]")
