@@ -326,7 +326,12 @@ ax1.plot(
     label=cal_type,
 )
 ax1.legend()
-ax1.set_ylabel("F$_{H2}$ from OER / [C/mol]")
+ax1.set_ylabel("F$_{O2}$ from OER / [C/mol]")
 ax1.set_xlabel("time / [h]")
-ax1.set_ylabel("F$_{H2}$ from OER / [C/mol]")
-ax1.set_xlabel("time / [h]")
+fig1.savefig("./F_OER_single_day_measurements_noSEM.png")
+np.savetxt(
+    "./F_OER_single_day_measurements_noSEM.csv",
+    np.array([time, Fs]),
+    delimiter=", ",
+    fmt="%s",
+)

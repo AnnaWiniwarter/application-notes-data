@@ -12,7 +12,7 @@ from pathlib import Path
 
 data_directory = (
     Path.home()
-    / r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note"
+    / r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note\gas cal tests"
 )
 
 start_data = MSMeasurement.read(
@@ -34,7 +34,7 @@ full_data_zilien = start_data + rest_data
 
 ec_directory = (
     Path.home()
-    / r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note\2022-06-24 13_19_04 HER_low_conc_gas_flow_cal_w_cell"
+    / r"C:\Users\AnnaWiniwarter\Dropbox (Spectro Inlets)\Development\Data\Quantification Application Note\\gas cal tests\2022-06-24 13_19_04 HER_low_conc_gas_flow_cal_w_cell"
 )
 
 cvs_ec_only_1 = ixdat.Measurement.read(
